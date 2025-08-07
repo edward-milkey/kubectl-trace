@@ -1,0 +1,4 @@
+[tools]
+go = '1.19'
+gomplate = '4.3.3'
+goreleaser = '2.11'

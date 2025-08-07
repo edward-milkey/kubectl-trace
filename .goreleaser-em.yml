@@ -1,0 +1,58 @@
+version: 2
+
+env_files:
+  github_token: /vagrant/github_token
+
+project_name: kubectl-trace
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: kubectl-trace
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    main: ./cmd/kubectl-trace
+    env:
+      - GO111MODULE=on
+      - CGO_ENABLED=0
+    ldflags: |
+      -X github.com/edward-milkey/kubectl-trace/pkg/version.buildTime={{ .Timestamp }}
+      -X github.com/edward-milkey/kubectl-trace/pkg/version.gitCommit={{ .Commit }}
+      -X github.com/edward-milkey/kubectl-trace/pkg/cmd.ImageTag={{ .Commit }}
+      -X github.com/edward-milkey/kubectl-trace/pkg/cmd.InitImageTag={{ .Commit }}
+    binary: kubectl-trace
+  - id: trace-runner
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    main: ./cmd/trace-runner
+    env:
+      - GO111MODULE=on
+      - CGO_ENABLED=0
+    ldflags: |
+      -X github.com/edward-milkey/kubectl-trace/pkg/version.buildTime={{ .Timestamp }}
+      -X github.com/edward-milkey/kubectl-trace/pkg/version.gitCommit={{ .Commit }}
+      -X github.com/edward-milkey/kubectl-trace/pkg/cmd.ImageTag={{ .Commit }}
+      -X github.com/edward-milkey/kubectl-trace/pkg/cmd.InitImageTag={{ .Commit }}
+    binary: trace-runner
+
+archives:
+  - id: kubectl-trace
+    ids:
+      - kubectl-trace
+    name_template: 'kubectl-trace_{{ .Tag }}_{{{ .Os }}_{{ .Arch }}'
+
+release:
+  github:
+    owner: edward-milkey
+    name: kubectl-trace
+  prerelease: true
