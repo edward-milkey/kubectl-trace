@@ -1,0 +1,41 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: trace
+spec:
+  version: {{ .Env.TAG_NAME }}
+  homepage: https://github.com/edward-milkey/kubectl-trace
+  platforms:
+  - selector:
+      matchLabels:
+        os: darwin
+        arch: amd64
+    uri: https://github.com/edward-milkey/kubectl-trace/releases/download/{{ .Env.TAG_NAME }}/kubectl-trace_{{ .Env.TAG_NAME }}_darwin_amd64.tar.gz
+    sha256: {{ .Env.SHA_DARWIN_AMD64 }}
+    bin: kubectl-trace
+  - selector:
+      matchLabels:
+        os: darwin
+        arch: arm64
+    uri: https://github.com/edward-milkey/kubectl-trace/releases/download/{{ .Env.TAG_NAME }}/kubectl-trace_{{ .Env.TAG_NAME }}_darwin_arm64.tar.gz
+    sha256: {{ .Env.SHA_DARWIN_ARM64 }}
+    bin: kubectl-trace
+  - selector:
+      matchLabels:
+        os: linux
+        arch: arm64
+    uri: https://github.com/edward-milkey/kubectl-trace/releases/download/{{ .Env.TAG_NAME }}/kubectl-trace_{{ .Env.TAG_NAME }}_linux_arm64.tar.gz
+    sha256: {{ .Env.SHA_LINUX_ARM64 }}
+    bin: kubectl-trace
+  - selector:
+      matchLabels:
+        os: linux
+        arch: amd64
+    uri: https://github.com/edward-milkey/kubectl-trace/releases/download/{{ .Env.TAG_NAME }}/kubectl-trace_{{ .Env.TAG_NAME }}_linux_amd64.tar.gz
+    sha256: {{ .Env.SHA_LINUX_AMD64 }}
+    bin: kubectl-trace
+  shortDescription: Trace Kubernetes pods and nodes with system tools
+  description: |
+    This plugin is used to analyze production systems and Kubernetes workloads
+    by scheduling a trace job on a target node or alongside a target pod in
+    order to analyze it with eBPF and other tracing and profiling technologies.
